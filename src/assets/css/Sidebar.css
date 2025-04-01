@@ -1,0 +1,18 @@
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 15px;
+}
+
+.sidebar-link {
+  text-decoration: none;
+  color: black;
+  transition: color 0.3s;
+}
+
+.sidebar-link:hover {
+  color: #00a884; /* Blue-400 equivalent */
+}
