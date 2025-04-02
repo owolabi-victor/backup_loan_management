@@ -326,19 +326,22 @@ function WebView({ token }) {
               onChange={handleChange}
             />
           </div>
+
           <div className="form-group">
             <label className="form-label">Duration (months)</label>
-            <input
-              type="number"
-              id="loanFormDuration"
+            <select
+              id="loanFormPurpose"
               className="form-input"
-              placeholder="Enter duration"
-              required
               name="plan"
               value={values.plan}
               onChange={handleChange}
-            />
+            >
+              <option value="">Select Duration</option>
+              <option value="6">6 months</option>
+              <option value="12">12 months</option>
+            </select>
           </div>
+
           <div className="form-group">
             <label className="form-label">Purpose</label>
             <select id="loanFormPurpose" className="form-input">

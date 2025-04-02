@@ -106,7 +106,9 @@ function LoanDetails({ token, isopen, setIsopen, LoanDetails }) {
       <Modal
         title="Loan Payback"
         isOpen={openPayback}
-        closeModal={() => setOpenPayback(false)}
+        closeModal={() => {
+          setOpenPayback(false), setAmount("");
+        }}
       >
         <form id="loanFormm" onSubmit={repayLoan}>
           <div className="form-group">
