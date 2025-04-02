@@ -56,6 +56,21 @@ function WebView({ token }) {
     });
   };
 
+  const getTransactionsFn = () => {
+    getTransactions(token)
+      .then((res) => {
+        console.log(res.data.transactions);
+        setLoans(res.data.transactions);
+        setLoadingLoans(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoadingLoans(false);
+
+        alert(err.response.data.error);
+      });
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("authToken");
 
@@ -69,18 +84,7 @@ function WebView({ token }) {
         alert(err.response.data.error);
       });
 
-    getTransactions(token)
-      .then((res) => {
-        console.log(res.data.transactions);
-        setLoans(res.data.transactions);
-        setLoadingLoans(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoadingLoans(false);
-
-        alert(err.response.data.error);
-      });
+    getTransactionsFn();
   }, []);
 
   const takeLoanFn = async (e) => {
@@ -103,6 +107,8 @@ function WebView({ token }) {
         setIsOpen(false);
         setLoading(false);
         resetForm();
+        getTransactionsFn();
+
         alert("Loan Successful");
       })
       .catch((err) => {
@@ -130,6 +136,8 @@ function WebView({ token }) {
         setIsOpenAddBalance(false);
         setLoading(false);
         resetForm();
+        getTransactionsFn();
+
         alert("Successful");
       })
       .catch((err) => {
@@ -158,6 +166,7 @@ function WebView({ token }) {
         setIsOpenPayService(false);
         resetForm();
         alert("Payment Successful");
+        getTransactionsFn();
         setLoadingService(false);
       })
       .catch((err) => {

@@ -109,8 +109,26 @@ function Loans() {
                     </span>
                   </div>
                 </div>
+
+                <div className="transaction-info">
+                  <div className="transaction-details">
+                    <span className="transaction-type">Balance</span>
+                    <span className="transaction-date">
+                      {loan.remaining_balance}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="transaction-info">
+                  <div className="transaction-details">
+                    <span className="transaction-type">Total amount</span>
+                    <span className="transaction-date">
+                      NGN{loan.total_amount_due}
+                    </span>
+                  </div>
+                </div>
+
                 <div className="transaction-amount">
-                  <p>NGN{loan.loan_amount}</p>
                   <img
                     src={more}
                     alt="more-icon"
