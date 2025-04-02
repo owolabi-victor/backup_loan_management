@@ -3,7 +3,7 @@ import Modal from "./modal";
 import { repayLoan } from "../api/core-api";
 import Loader from "./loader";
 
-function LoanDetails({ isopen, setIsopen, LoanDetails }) {
+function LoanDetails({ token, isopen, setIsopen, LoanDetails }) {
   const [loading, setLoading] = useState(false);
 
   const paybackLoan = () => {
@@ -13,11 +13,16 @@ function LoanDetails({ isopen, setIsopen, LoanDetails }) {
 
     setLoading(true);
 
-    repayLoan(LoanDetails.id, payload)
-      .then(() => {})
+    repayLoan(token, LoanDetails.id, payload)
+      .then((res) => {
+        console.log(res);
+        setIsopen(false);
+        alert("Loan payment successful");
+      })
       .catch((err) => {
         setLoading(false);
-        console.log(err);
+        console.log(err.response.data.error);
+        alert(err.response.data.error);
       });
   };
 

@@ -1,30 +1,32 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/auth";
-// import "../assets/css/styles.css";
+import Loader from "../components/loader";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setError(""); // Reset any previous errors
-
-    // Retrieve stored credentials (mock storage for now)
 
     if (email && password) {
+      setLoading(true);
       login({ email, password })
         .then((res) => {
           console.log(res);
           localStorage.setItem("authToken", res.data.token);
-          alert("Login successful!");
+          localStorage.setItem("name", res.data.user.name);
+
           navigate("/dashboard");
+          // alert("Login successful!");
         })
         .catch(() => {
           alert("Login failed!");
+          setLoading(false);
         });
     } else {
       // Set error message
@@ -84,7 +86,7 @@ const Login = () => {
               />
             </div>
             <button type="submit" className="signup-btn">
-              Login
+              {loading ? <Loader /> : "Login"}
             </button>
             <div className="login-text">
               Don't have an account?
