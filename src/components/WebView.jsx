@@ -9,7 +9,7 @@ import {
   payForService,
   takeLoan,
 } from "../api/core-api";
-import more from "../assets/icons/more.svg";
+// import more from "../assets/icons/more.svg";
 import LoanDetails from "./LoanDetails";
 import Loader from "./loader";
 import moment from "moment";
@@ -29,7 +29,7 @@ function WebView({ token }) {
   const [balance, setBalance] = useState(0);
   const [loans, setLoans] = useState([]);
 
-  const [loanDetails, setLoanDetails] = useState(null);
+  // const [loanDetails, setLoanDetails] = useState(null);
   const [isOpenLoanDetails, setIsOpenLoanDetails] = useState(false);
   const [isOpenAddBalance, setIsOpenAddBalance] = useState(false);
 
@@ -246,14 +246,14 @@ function WebView({ token }) {
               </div>
               <div className="transaction-amount">
                 <p>NGN{loan.amount}</p>
-                <img
+                {/* <img
                   src={more}
                   alt="more-icon"
                   onClick={() => {
                     setLoanDetails(loan);
                     setIsOpenLoanDetails(true);
                   }}
-                />
+                /> */}
               </div>
             </div>
           ))
@@ -265,7 +265,7 @@ function WebView({ token }) {
       <LoanDetails
         isopen={isOpenLoanDetails}
         setIsopen={setIsOpenLoanDetails}
-        LoanDetails={loanDetails}
+        // LoanDetails={loanDetails}
         token={token}
       />
 
