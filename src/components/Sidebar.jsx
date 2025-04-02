@@ -26,6 +26,13 @@ const Sidebar = () => {
               Dashboard
             </Link>
           </li>
+
+          <li className={"sidebar-nav-item"}>
+            <Link to="/loans" className="sidebar-link ">
+              <span style={{ marginRight: "10px" }}>💰</span>
+              Loans
+            </Link>
+          </li>
         </ul>
       </nav>
       <div

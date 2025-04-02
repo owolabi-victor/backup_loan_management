@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 // import "./index.css"; // Ensure this is imported
 import Layout from "../Layout";
+import Loans from "./pages/Loans";
 
 const App = () => {
   return (
@@ -30,8 +31,10 @@ const App = () => {
 
         <Route path="/dashboard" element={<Layout />}>
           <Route index element={<Dashboard />} />
-          {/* <Route path="profile" element={<Profile />} /> */}
+          {/* <Route path="loan" element={<Loans />} /> */}
         </Route>
+        <Route path="/loans" element={<Loans />} />
+
         {/* Catch-all route to redirect to login */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

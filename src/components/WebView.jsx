@@ -2,10 +2,18 @@ import React, { useEffect, useState } from "react";
 import TakeLoanModal from "./TakeLoanModal";
 import { X } from "lucide-react";
 import Modal from "./modal";
-import { getLoans, getProfile, payForService, takeLoan } from "../api/core-api";
+import {
+  addBalance,
+  getProfile,
+  getTransactions,
+  payForService,
+  takeLoan,
+} from "../api/core-api";
 import more from "../assets/icons/more.svg";
 import LoanDetails from "./LoanDetails";
 import Loader from "./loader";
+import moment from "moment";
+
 function WebView({ token }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPayService, setIsOpenPayService] = useState(false);
@@ -16,12 +24,14 @@ function WebView({ token }) {
     serviceAmount: "",
     serviceDescription: "",
     serviceType: "",
+    addBalanceAmount: 0,
   });
   const [balance, setBalance] = useState(0);
   const [loans, setLoans] = useState([]);
 
   const [loanDetails, setLoanDetails] = useState(null);
   const [isOpenLoanDetails, setIsOpenLoanDetails] = useState(false);
+  const [isOpenAddBalance, setIsOpenAddBalance] = useState(false);
 
   const [loadingService, setLoadingService] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -32,6 +42,17 @@ function WebView({ token }) {
     setValues({
       ...values,
       [name]: value,
+    });
+  };
+
+  const resetForm = () => {
+    setValues({
+      amount: "",
+      plan: "",
+      serviceAmount: "",
+      serviceDescription: "",
+      serviceType: "",
+      addBalanceAmount: "",
     });
   };
 
@@ -48,10 +69,10 @@ function WebView({ token }) {
         alert(err.response.data.error);
       });
 
-    getLoans(token)
+    getTransactions(token)
       .then((res) => {
-        console.log(res);
-        setLoans(res.data.loans);
+        console.log(res.data.transactions);
+        setLoans(res.data.transactions);
         setLoadingLoans(false);
       })
       .catch((err) => {
@@ -81,7 +102,35 @@ function WebView({ token }) {
         setLoans([...loans, res.data.loan]);
         setIsOpen(false);
         setLoading(false);
+        resetForm();
         alert("Loan Successful");
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        alert(err.response.data.error);
+      });
+  };
+
+  const addBalanceFn = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      amount: values.addBalanceAmount,
+    };
+
+    console.log(payload);
+
+    setLoading(true);
+
+    await addBalance(token, payload)
+      .then((res) => {
+        console.log(res.data);
+        setBalance(res.data.balance);
+        setIsOpenAddBalance(false);
+        setLoading(false);
+        resetForm();
+        alert("Successful");
       })
       .catch((err) => {
         console.log(err);
@@ -107,6 +156,7 @@ function WebView({ token }) {
       .then((res) => {
         console.log(res);
         setIsOpenPayService(false);
+        resetForm();
         alert("Payment Successful");
         setLoadingService(false);
       })
@@ -159,9 +209,13 @@ function WebView({ token }) {
           <span className="action-icon">💳</span>
           <span className="action-label">Pay Loan</span>
         </div>
-        <div className="action-button" id="webCheckStatusBtn">
+        <div
+          className="action-button"
+          id="webCheckStatusBtn"
+          onClick={() => setIsOpenAddBalance(true)}
+        >
           <span className="action-icon">📊</span>
-          <span className="action-label">Check Status</span>
+          <span className="action-label">Add balance</span>
         </div>
         <div
           className="action-button"
@@ -184,12 +238,14 @@ function WebView({ token }) {
               <div className="transaction-info">
                 <div className="transaction-icon">💰</div>
                 <div className="transaction-details">
-                  <span className="transaction-type">Loan</span>
-                  <span className="transaction-date">14th February, 2025</span>
+                  <span className="transaction-type">{loan.type}</span>
+                  <span className="transaction-date">
+                    {moment(loan.created_at).format("YYYY-MM-DD HH:mm:ss")}
+                  </span>
                 </div>
               </div>
               <div className="transaction-amount">
-                <p>NGN{loan.loan_amount}</p>
+                <p>NGN{loan.amount}</p>
                 <img
                   src={more}
                   alt="more-icon"
@@ -212,6 +268,34 @@ function WebView({ token }) {
         LoanDetails={loanDetails}
         token={token}
       />
+
+      {/* Add balance */}
+
+      <Modal
+        title="Add balance"
+        isOpen={isOpenAddBalance}
+        closeModal={() => setIsOpenAddBalance(false)}
+      >
+        <form id="loanFormm" onSubmit={addBalanceFn}>
+          <div className="form-group">
+            <label className="form-label">Amount (NGN)</label>
+            <input
+              type="number"
+              id="addBalanceAmount"
+              name="addBalanceAmount"
+              className="form-input"
+              placeholder="Enter amount"
+              required
+              value={values.addBalanceAmount}
+              onChange={handleChange}
+            />
+          </div>
+
+          <button type="submit" id="takeLoadButton" className="form-button">
+            {loading ? <Loader /> : "Add balance"}
+          </button>
+        </form>
+      </Modal>
 
       {/* Take loan */}
       <Modal

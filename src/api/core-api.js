@@ -26,6 +26,17 @@ export async function getLoans(token) {
   return loans;
 }
 
+export async function getTransactions(token) {
+  const loans = await axios.get(`${baseUrl}/api/transactions`, {
+    headers: {
+      Authorization: "Bearer " + token,
+      "ngrok-skip-browser-warning": "true",
+    },
+  });
+
+  return loans;
+}
+
 export async function takeLoan(token, payload) {
   const takeLoan = await axios.post(`${baseUrl}/api/loans`, payload, {
     headers: {
@@ -54,6 +65,17 @@ export async function repayLoan(token, id, amount) {
 
 export async function payForService(token, payload) {
   const takeLoan = await axios.post(`${baseUrl}/api/pay-service`, payload, {
+    headers: {
+      Authorization: "Bearer " + token,
+      "ngrok-skip-browser-warning": "true",
+    },
+  });
+
+  return takeLoan;
+}
+
+export async function addBalance(token, payload) {
+  const takeLoan = await axios.post(`${baseUrl}/api/balance/add`, payload, {
     headers: {
       Authorization: "Bearer " + token,
       "ngrok-skip-browser-warning": "true",
